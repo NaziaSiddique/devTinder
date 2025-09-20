@@ -1,22 +1,24 @@
 const express = require("express");
 const app = express();
+const { adminAuth, userAuth } = require("./middlewares/auth");
+
+//Handle Auth Middleware for only GET requests, GET, POST, DELETE, PUT, PATCH
+app.use("/admin", adminAuth);
+
+app.post("/user/login", (req, res) => {
+    res.send("User Logged In Successfully!");
+});
+
+app.get("/user", userAuth, (req, res) => {
+    res.send("User Data Sent!");    
+});
 
 app.get("/admin/getAllData", (req, res) => {
-  //Logic checking if the request is authorised
-//   const token = "ABC"; For unauthorised request
-  const token = "xyz"; // For authorised request
-
-  const isAdminAuthorised = token === "xyz";
-  if (isAdminAuthorised) {
-    res.send("All Data Sent!");
-  }
-  else {
-    res.status("401").send("Unauthorised Request!");
-  }
+    console.log("Admin Auth is Successful!");
+  res.send("All Data Sent!");
 });
 
 app.get("/admin/deleteUser", (req, res, next) => {
-  //Logic of deleting a user
   res.send("User Deleted!!");
 });
 
