@@ -1,25 +1,23 @@
 const express = require("express");
+
 const app = express();
-const { adminAuth, userAuth } = require("./middlewares/auth");
 
-//Handle Auth Middleware for only GET requests, GET, POST, DELETE, PUT, PATCH
-app.use("/admin", adminAuth);
-
-app.post("/user/login", (req, res) => {
-    res.send("User Logged In Successfully!");
+app.use("/", (err, req, res, next) => {
+  if (err) {
+    // Log error message
+    console.error(err.message);
+    res.status(500).send("Some error occurred at server - Wildcard");
+  }
 });
 
-app.get("/user", userAuth, (req, res) => {
-    res.send("User Data Sent!");    
-});
-
-app.get("/admin/getAllData", (req, res) => {
-    console.log("Admin Auth is Successful!");
-  res.send("All Data Sent!");
-});
-
-app.get("/admin/deleteUser", (req, res, next) => {
-  res.send("User Deleted!!");
+app.get("/getUserData", (req, res) => {
+  try {
+    // Logic of DB call and get user data
+    throw new Error("DB connection failed");
+    res.send("User Data Sent!");
+  } catch (err) {
+    res.status(500).send("Some error occurred at server - try-catch");
+  }
 });
 
 app.listen(3005, () => {
