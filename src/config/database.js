@@ -2,14 +2,8 @@ const mongoose = require("mongoose");
 
 const connectDB = async () => {
   await mongoose.connect(
-    "mongodb+srv://kaelixkodes:v1pZmPxvu6XDq8Qu@learningnode.mtirazc.mongodb.net/"
+    "mongodb+srv://kaelixkodes:v1pZmPxvu6XDq8Qu@learningnode.mtirazc.mongodb.net/devTinder"
   );
 };
 
-connectDB()
-  .then(() => {
-    console.log("Database connected");
-  })
-  .catch((err) => {
-    console.error("Database connection error:", err);
-  });
+module.exports = connectDB;

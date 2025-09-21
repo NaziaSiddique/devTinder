@@ -1,25 +1,33 @@
 const express = require("express");
-
+const connectDB = require("./config/database");
 const app = express();
+const User = require("./models/user");
 
-app.use("/", (err, req, res, next) => {
-  if (err) {
-    // Log error message
-    console.error(err.message);
-    res.status(500).send("Some error occurred at server - Wildcard");
-  }
-});
+app.post("/signup", async (req, res) => {
+  //Creating a new instance of the User model
+  const user = new User({
+    firstName: "Jane",
+    lastName: "Doe'd",
+    emailId: "janedoe@test.com",
+    password: "password1234",
+  });
 
-app.get("/getUserData", (req, res) => {
   try {
-    // Logic of DB call and get user data
-    throw new Error("DB connection failed");
-    res.send("User Data Sent!");
+      await user.save();
+      res.send("User signed up and saved to database successfully!");
   } catch (err) {
-    res.status(500).send("Some error occurred at server - try-catch");
+    res.status(400).send("Error signing up user: " + err.message);
   }
+
 });
 
-app.listen(3005, () => {
-  console.log("Server is running on port 3005");
-});
+connectDB()
+  .then(() => {
+    console.log("Database connection established");
+    app.listen(3005, () => {
+      console.log("Server is running on port 3005");
+    });
+  })
+  .catch((err) => {
+    console.error("Database connection error:", err);
+  });
